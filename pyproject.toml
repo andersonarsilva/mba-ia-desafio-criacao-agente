@@ -12,6 +12,7 @@ dependencies = [
 
 [project.scripts]
 aurora-restaurar = "aurora.cli:restaurar"
+aurora-api = "aurora.cli:api"
 
 [dependency-groups]
 dev = [
