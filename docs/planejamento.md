@@ -47,7 +47,13 @@ Objetivo: entregar **exatamente** o que o desafio exige, com as cinco garantias 
 | 0006 | Apartamento = `user_id` da sessão ADK (imutável), gravado só em `POST /sessoes`; nenhuma tool recebe `apartamento` | G2 independe do prompt |
 | 0007 | Regulamento indexado por capítulo; tool `ler_capitulo(capitulo)` devolve **um** capítulo; especialista isolado em `AgentTool` devolve só a resposta | G4 por construção, com duas barreiras |
 | 0008 | Restauração recria `condominio.db` a partir de `dados/*.json` e apaga `sessions.db`; boot só semeia se o banco não existir | Estado limpo e previsível; restart nunca re-semeia |
-| 0009 | Modelo Gemini configurável por env (`AURORA_MODEL`), retry com backoff em 429/5xx via `HttpRetryOptions` | Limites do AI Studio mudam; o fluxo faz dezenas de chamadas |
+| 0009 | Modelo Gemini configurável por env (`AURORA_MODEL`, padrão `gemini-2.5-flash`), retry com backoff em 429/5xx via `HttpRetryOptions` | Limites do AI Studio mudam; o fluxo faz dezenas de chamadas |
+| 0010 | Pontos livres do contrato: apto inexistente → 404 na criação; nova mensagem com pendência segue a conversa; `acao` = nome da tool; `detalhes` = payload; eventos no formato do ADK; falha do modelo → 503; `127.0.0.1:8000` | Previsibilidade e nenhum 500 genérico |
+| 0011 | Processo uvicorn único com `asyncio.Lock` por sessão | Checagem de 409 e retomada atômicas por sessão, sem serializar sessões diferentes |
+| 0012 | Domínio em português (tools, tabelas, API), infraestrutura em inglês | Linguagem ubíqua com o contrato e `dados/` |
+| 0013 | pytest sem LLM, meta de 80% em `src/aurora`, serial (≤ 2 workers), mais script E2E | Garantias protegidas sem gastar cota |
+
+Índice completo em [`docs/adr/README.md`](adr/README.md). Todas as decisões estão fechadas; os spikes da Wave 0 só validam as decisões 0002–0004 e, se falharem, geram um ADR substituto.
 
 ## 3. Desenho da solução
 
@@ -117,14 +123,14 @@ Regras de execução: cada task fecha com commit atômico (Conventional Commits,
 
 | ID | Task | Pronto quando |
 |---|---|---|
-| W0.1 | Instalar `uv` (pré-requisito da máquina, fora do repo) | `uv --version` ok |
-| W0.2 | `.gitignore` (`docs/desafio.md`, `var/`, `.env`) | `git status` não lista `desafio.md` ✅ feito |
-| W0.3 | `uv init` com `requires-python>=3.12`, `google-adk==2.9.1`, `.env.example` (`GOOGLE_API_KEY`, `GOOGLE_GENAI_USE_VERTEXAI=FALSE`, `AURORA_MODEL`) | `uv sync` sem erro; `uv.lock` gerado |
+| W0.1 | Instalar `uv` (pré-requisito da máquina, fora do repo) | `uv --version` ok ✅ feito |
+| W0.2 | `.gitignore` (`docs/desafio.md`, `.claude/`, `var/`, `.env`) | `git status` não lista `desafio.md` ✅ feito |
+| W0.3 | `uv init` com `requires-python>=3.12`, `google-adk==2.9.1`, `.env.example` (`GOOGLE_API_KEY`, `GOOGLE_GENAI_USE_VERTEXAI`, `AURORA_MODEL`) | `uv sync` sem erro; `uv.lock` gerado ✅ feito |
 | W0.4 | **Spike confirmação**: root + 1 sub_agent com tool que chama `request_confirmation`, `SqliteSessionService`, App resumível. Cenários: aprovar, negar, reenviar, **aprovar após reiniciar o processo** | Tool executa exatamente 1× em todos os cenários; matriz resumível on/off registrada |
 | W0.5 | **Spike isolamento**: `AgentTool(regulamento)` — confirmar que eventos da sessão pai só têm `function_call`/`function_response` com a resposta final | Nenhum texto do capítulo nos eventos pai |
 | W0.6 | **Spike concorrência**: 2 sessões gravando em paralelo no `SqliteSessionService` | Sem `database is locked`; se houver, aplicar WAL/busy_timeout |
-| W0.7 | Escolher modelo no AI Studio (RPM/RPD) | `AURORA_MODEL` default definido; ADR-0009 |
-| W0.8 | Registrar ADRs 0001–0004 com resultado dos spikes | ADRs com status "Aceito" |
+| W0.7 | Confirmar no AI Studio que `gemini-2.5-flash` está disponível na conta | ADR-0009 validado |
+| W0.8 | Registrar os ADRs 0001–0013 e atualizar 0002–0004 com o resultado dos spikes | ✅ ADRs escritos; resultados dos spikes pendentes |
 
 Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o produto. Se W0.4 falhar, plano B documentado no ADR-0003: tools-folha de confirmação no root (autor único), mantendo especialistas para leitura/negócio.
 
@@ -138,7 +144,7 @@ Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o 
 | W1.4 | `repositorio.py`: disponibilidade (bool), listar por apto, reservar atômico, cancelar lógico por apto, autorizar visitante | Testes unitários passando |
 | W1.5 | Gerador de código `RSV-<8 hex>` com retry em colisão | Teste de unicidade inclusive contra canceladas |
 | W1.6 | `regulamento/indice.py`: parse por `## Capítulo`, busca por número/título | "piscina" → só Capítulo IV |
-| W1.7 | Testes: concorrência (N inserts simultâneos → 1 vence), isolamento por apto, parser | `uv run pytest` verde, ≤ 2 workers |
+| W1.7 | Adicionar `pytest-cov` ao grupo `dev`; testes: concorrência (N inserts simultâneos → 1 vence), isolamento por apto, parser | `uv run pytest` verde, serial (≤ 2 workers) |
 
 ### Wave 2 — Agentes e tools
 
@@ -177,7 +183,7 @@ Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o 
 | ID | Task | Pronto quando |
 |---|---|---|
 | W5.1 | `README.md` substituindo o enunciado: **Arquitetura**, **Garantias** (arquivo + trecho + por que não depende do modelo), **Como rodar** | Toda referência aponta para código existente |
-| W5.2 | `docs/arquitetura.md` (diagramas Mermaid: componentes, sequência de confirmação), `docs/contrato-api.md`, ADRs 0005–0009 | Docs completos |
+| W5.2 | `docs/arquitetura.md` (diagramas Mermaid: componentes, sequência de confirmação), `docs/contrato-api.md` (inclui ADR-0010), revisão final dos ADRs | Docs completos |
 | W5.3 | Checklist do passo 15: `git diff --exit-code be87e1d -- dados/`, `secrets scan`, versão ADK exata no `uv.lock` | Tudo ok |
 | W5.4 | Clone limpo → `.env` → `uv sync` → restaurar → subir → fluxo E2E | Verde |
 | W5.5 | Merge `develop` → `main`, push, confirmar fork **público** | Link do fork entregue |
@@ -219,7 +225,7 @@ Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o 
 
 - [ ] Todos os critérios de aceite do enunciado marcados.
 - [ ] `scripts/fluxo_avaliador.py` verde 3× em clone limpo, incluindo restart e disputa.
-- [ ] `uv run pytest` verde com ≤ 2 workers, sem chamadas reais ao LLM.
+- [ ] `uv run pytest --cov=aurora --cov-branch` verde, ≥ 80%, serial (≤ 2 workers), sem chamadas reais ao LLM.
 - [ ] `dados/` idêntico ao commit base; nenhuma chave versionada; `docs/desafio.md` fora do Git.
 - [ ] README com as três seções e referências válidas; `docs/` com arquitetura, contrato e ADRs.
 - [ ] Tudo em `main` no fork público.
