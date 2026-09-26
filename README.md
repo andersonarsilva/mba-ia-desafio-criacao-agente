@@ -134,3 +134,8 @@ uv run python scripts/fluxo_avaliador.py   # passos 1–14 do fluxo do avaliador
 ```
 
 Os testes unitários e de integração usam um LLM falso roteirizado com o Runner, o SQLite e as rotas reais. Eles cobrem o fluxo do avaliador, o reinício e a disputa simultânea sem gastar cota.
+
+Para testar manualmente:
+
+- [`docs/exemplos-curl.md`](docs/exemplos-curl.md): roteiro com curl que segue o fluxo do avaliador, incluindo a disputa com dois curl simultâneos.
+- [`docs/postman/aurora.postman_collection.json`](docs/postman/aurora.postman_collection.json): collection Postman com o mesmo roteiro. Ela guarda os ids de sessão e de confirmação em variáveis e já confere os status esperados.

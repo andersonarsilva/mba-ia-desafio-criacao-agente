@@ -1,6 +1,6 @@
 # Contrato da API
 
-Base: `http://localhost:8000`. Todas as rotas recebem e devolvem JSON. Rotas com `{session_id}` respondem 404 quando a sessão não existe. Comportamentos que o enunciado deixa livres seguem o [ADR-0010](adr/0010-definir-comportamentos-livres-do-contrato-da-api.md).
+Base: `http://localhost:8000`. Todas as rotas recebem e devolvem JSON. Rotas com `{session_id}` respondem 404 quando a sessão não existe. Comportamentos que o enunciado deixa livres seguem o [ADR-0010](adr/0010-definir-comportamentos-livres-do-contrato-da-api.md). Exemplos prontos: [curl](exemplos-curl.md) e [collection Postman](postman/aurora.postman_collection.json).
 
 ## Conversa
 
