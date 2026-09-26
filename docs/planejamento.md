@@ -125,7 +125,7 @@ Regras de execução: cada task fecha com commit atômico (Conventional Commits,
 |---|---|---|
 | W0.1 | Instalar `uv` (pré-requisito da máquina, fora do repo) | `uv --version` ok ✅ feito |
 | W0.2 | `.gitignore` (`docs/desafio.md`, `.claude/`, `var/`, `.env`) | `git status` não lista `desafio.md` ✅ feito |
-| W0.3 | `uv init` com `requires-python>=3.12`, `google-adk==2.9.1`, `.env.example` (`GOOGLE_API_KEY`, `GOOGLE_GENAI_USE_VERTEXAI`, `AURORA_MODEL`) | `uv sync` sem erro; `uv.lock` gerado ✅ feito |
+| W0.3 | `uv init` com `requires-python>=3.12`, `google-adk==2.9.1`, `.env.example` (`GOOGLE_API_KEY`, `AURORA_MODEL`) | `uv sync` sem erro; `uv.lock` gerado ✅ feito |
 | W0.4 | **Spike confirmação**: root + 1 sub_agent com tool que chama `request_confirmation`, `SqliteSessionService`, App resumível. Cenários: aprovar, negar, reenviar, **aprovar após reiniciar o processo** | Tool executa exatamente 1× em todos os cenários; matriz resumível on/off registrada |
 | W0.5 | **Spike isolamento**: `AgentTool(regulamento)` — confirmar que eventos da sessão pai só têm `function_call`/`function_response` com a resposta final | Nenhum texto do capítulo nos eventos pai |
 | W0.6 | **Spike concorrência**: 2 sessões gravando em paralelo no `SqliteSessionService` | Sem `database is locked`; se houver, aplicar WAL/busy_timeout |

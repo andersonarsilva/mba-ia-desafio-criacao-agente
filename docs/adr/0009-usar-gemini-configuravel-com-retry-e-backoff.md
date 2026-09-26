@@ -37,7 +37,7 @@ Os modelos são Gemini com chave do Google AI Studio. Os modelos disponíveis e 
 
 ## Decisão
 
-**Escolhemos a Opção C.** `AURORA_MODEL` é opcional (padrão `gemini-2.5-flash`); `GOOGLE_API_KEY` é obrigatória e validada no boot; `GOOGLE_GENAI_USE_VERTEXAI=FALSE`. O retry fica nas `http_options` do `generate_content_config` de cada agente. Falha persistente após os retries vira resposta de erro JSON da API (ADR-0010), sem stacktrace.
+**Escolhemos a Opção C.** `AURORA_MODEL` é opcional (padrão `gemini-2.5-flash`); `GOOGLE_API_KEY` é obrigatória e validada no boot. `GOOGLE_GENAI_USE_VERTEXAI` fica fora do `.env.example`: ausente, o google-genai já usa a Gemini Developer API (AI Studio), que é o backend exigido; o boot força esse backend para que uma variável exportada no shell não desvie para o Vertex AI. O retry fica nas `http_options` do `generate_content_config` de cada agente. Falha persistente após os retries vira resposta de erro JSON da API (ADR-0010), sem stacktrace.
 
 ## Consequências
 
