@@ -7,7 +7,7 @@ from google.adk.tools.agent_tool import AgentTool
 
 from aurora.agentes.app import RETRY_OPTIONS, criar_app, criar_modelo, criar_runner
 from aurora.agentes.arvore import criar_agente_raiz
-from aurora.config import DEFAULT_PATHS, Settings
+from aurora.config import DEFAULT_MODEL, DEFAULT_PATHS, Settings
 from aurora.regulamento.indice import IndiceRegulamento
 
 INDICE = IndiceRegulamento.carregar(DEFAULT_PATHS.regulamento)
@@ -15,7 +15,7 @@ INDICE = IndiceRegulamento.carregar(DEFAULT_PATHS.regulamento)
 
 @pytest.fixture
 def raiz(repositorio):
-    return criar_agente_raiz(Gemini(model="gemini-2.5-flash"), repositorio, INDICE)
+    return criar_agente_raiz(Gemini(model=DEFAULT_MODEL), repositorio, INDICE)
 
 
 def _instrucao(agente) -> str:
@@ -76,8 +76,8 @@ def test_model_has_retry_and_timeout(monkeypatch):
 
 
 def test_app_is_resumable_and_runner_persists_in_sqlite(paths, repositorio):
-    app = criar_app(Gemini(model="gemini-2.5-flash"), repositorio, INDICE)
-    runner = criar_runner(app, Settings(model="gemini-2.5-flash", paths=paths))
+    app = criar_app(Gemini(model=DEFAULT_MODEL), repositorio, INDICE)
+    runner = criar_runner(app, Settings(model=DEFAULT_MODEL, paths=paths))
 
     assert app.resumability_config.is_resumable
     assert isinstance(runner.session_service, SqliteSessionService)
