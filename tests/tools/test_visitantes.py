@@ -37,7 +37,8 @@ def test_approved_authorization_writes_for_session_apartment(tools, repositorio)
 
     resultado = tools["autorizar_visitante"]("Joana Ribeiro", "2030-04-21", contexto)
 
-    assert resultado == {"status": "autorizado", "nome": "Joana Ribeiro", "data": "2030-04-21"}
+    assert resultado["status"] == "autorizado"
+    assert (resultado["nome"], resultado["data"]) == ("Joana Ribeiro", "2030-04-21")
     assert [v.nome for v in repositorio.listar_visitantes("101")] == ["Joana Ribeiro"]
 
 

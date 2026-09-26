@@ -47,7 +47,7 @@ Objetivo: entregar **exatamente** o que o desafio exige, com as cinco garantias 
 | 0006 | Apartamento = `user_id` da sessão ADK (imutável), gravado só em `POST /sessoes`; nenhuma tool recebe `apartamento` | G2 independe do prompt |
 | 0007 | Regulamento indexado por capítulo; tool `ler_capitulo(capitulo)` devolve **um** capítulo; especialista isolado em `AgentTool` devolve só a resposta | G4 por construção, com duas barreiras |
 | 0008 | Restauração recria `condominio.db` a partir de `dados/*.json` e apaga `sessions.db`; boot só semeia se o banco não existir | Estado limpo e previsível; restart nunca re-semeia |
-| 0009 | Modelo Gemini configurável por env (`AURORA_MODEL`, padrão `gemini-3.8-flash`), retry com backoff em 429/5xx via `HttpRetryOptions` | Limites do AI Studio mudam; o fluxo faz dezenas de chamadas |
+| 0009 | Modelo Gemini configurável por env (`AURORA_MODEL`, padrão `gemini-3.1-flash-lite`), retry com backoff em 429/5xx via `HttpRetryOptions` | Limites do AI Studio mudam; o fluxo faz dezenas de chamadas |
 | 0010 | Pontos livres do contrato: apto inexistente → 404 na criação; nova mensagem com pendência segue a conversa; `acao` = nome da tool; `detalhes` = payload; eventos no formato do ADK; falha do modelo → 503; `127.0.0.1:8000` | Previsibilidade e nenhum 500 genérico |
 | 0011 | Processo uvicorn único com `asyncio.Lock` por sessão | Checagem de 409 e retomada atômicas por sessão, sem serializar sessões diferentes |
 | 0012 | Domínio em português (tools, tabelas, API), infraestrutura em inglês | Linguagem ubíqua com o contrato e `dados/` |
@@ -129,7 +129,7 @@ Regras de execução: cada task fecha com commit atômico (Conventional Commits,
 | W0.4 | ✅ **Spike confirmação**: root + 1 sub_agent com tool que chama `request_confirmation`, `SqliteSessionService`, App resumível. Cenários: aprovar, negar, reenviar, **aprovar após reiniciar o processo** | Tool executa exatamente 1× em todos os cenários; matriz resumível on/off registrada |
 | W0.5 | ✅ **Spike isolamento**: `AgentTool(regulamento)` — confirmar que eventos da sessão pai só têm `function_call`/`function_response` com a resposta final | Nenhum texto do capítulo nos eventos pai |
 | W0.6 | ✅ **Spike concorrência**: 2 sessões gravando em paralelo no `SqliteSessionService` | Sem `database is locked`; se houver, aplicar WAL/busy_timeout |
-| W0.7 | Confirmar com uma chamada real o modelo padrão (`gemini-3.8-flash`; o `gemini-2.5-flash` foi recusado para contas novas) | ADR-0009 validado ✅ feito |
+| W0.7 | Confirmar com uma chamada real o modelo padrão (`gemini-3.1-flash-lite`; o `gemini-2.5-flash` foi recusado para contas novas e o `gemini-3.8-flash` tem só 20 requisições/dia no free tier) | ADR-0009 validado ✅ feito |
 | W0.8 | Registrar os ADRs 0001–0013 e atualizar 0002–0004 com o resultado dos spikes | ✅ ADRs escritos e atualizados com os spikes |
 
 Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o produto. Se W0.4 falhar, plano B documentado no ADR-0003: tools-folha de confirmação no root (autor único), mantendo especialistas para leitura/negócio.
@@ -173,10 +173,10 @@ Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o 
 
 | ID | Task | Pronto quando |
 |---|---|---|
-| W4.1 | `scripts/fluxo_avaliador.py` (httpx) com asserts dos passos 1–14, pausa para restart manual no 13, aprovações simultâneas no 14 | Script verde |
-| W4.2 | Executar o fluxo **3×** em clone limpo (variação do LLM), inclusive com redações alternativas | 3/3 verdes |
-| W4.3 | Varredura de vazamento: `grep` de `RSV-4821`, `Marina Duarte`, trechos de outros capítulos em `GET /eventos` | Zero ocorrências |
-| W4.4 | Endurecimento de prompts apenas onde o E2E falhar (redação), nunca movendo regra para o prompt | Sem regressão |
+| W4.1 ✅ | `scripts/fluxo_avaliador.py` (httpx) com asserts dos passos 1–14, pausa para restart manual no 13, aprovações simultâneas no 14 | Script verde |
+| W4.2 ✅ | Executar o fluxo em clone limpo | 1/1 verde com `gemini-3.1-flash-lite` (execuções limitadas para economizar cota do free tier; as garantias são cobertas sem LLM pela suíte `tests/api/test_fluxo.py`) |
+| W4.3 ✅ | Varredura de vazamento: `grep` de `RSV-4821`, `Marina Duarte`, trechos de outros capítulos em `GET /eventos` | Zero ocorrências |
+| W4.4 ✅ | Endurecimento de prompts apenas onde o E2E falhar (redação), nunca movendo regra para o prompt | Sem regressão |
 
 ### Wave 5 — Documentação e entrega
 

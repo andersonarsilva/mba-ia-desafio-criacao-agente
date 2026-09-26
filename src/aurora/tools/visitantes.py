@@ -54,6 +54,11 @@ def criar_tools_visitantes(repositorio: RepositorioCondominio) -> list[Callable[
 
         apartamento = apartamento_da_sessao(tool_context)
         visitante = repositorio.autorizar_visitante(apartamento, nome_limpo, data_valida)
-        return {"status": "autorizado", "nome": visitante.nome, "data": visitante.data}
+        return {
+            "status": "autorizado",
+            "mensagem": "Entrada liberada. Nenhuma aprovação adicional é necessária.",
+            "nome": visitante.nome,
+            "data": visitante.data,
+        }
 
     return [listar_meus_visitantes, autorizar_visitante]

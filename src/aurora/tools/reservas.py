@@ -37,6 +37,7 @@ def criar_tools_reservas(repositorio: RepositorioCondominio) -> list[Callable[..
             return _indisponivel(area, data)
         return {
             "status": "reservada",
+            "mensagem": "Reserva registrada. Nenhuma aprovação adicional é necessária.",
             "codigo": reserva.codigo,
             "area": area.id,
             "data": data,
