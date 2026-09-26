@@ -48,5 +48,5 @@ Os modelos são Gemini com chave do Google AI Studio. Os modelos disponíveis e 
 - Retries aumentam a latência de uma requisição sob throttling
 
 ### Ações decorrentes
-- [ ] Confirmar no AI Studio que `gemini-2.5-flash` está disponível na conta antes do E2E
+- [x] `gemini-2.5-flash` listado como disponível na conta (W0.7); modelos 3.x também disponíveis como alternativa via `AURORA_MODEL`
 - [ ] Documentar as variáveis no README

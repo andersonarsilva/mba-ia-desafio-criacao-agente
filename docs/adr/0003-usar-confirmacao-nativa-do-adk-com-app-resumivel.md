@@ -61,7 +61,22 @@ O curso mostra a confirmação só no `adk web`. Numa API própria precisamos de
 - Retomada em modo resumível garante "pelo menos uma vez"; a gravação precisa ser idempotente por natureza (índice único do ADR-0005)
 - Duas respostas simultâneas para a mesma confirmação estão fora de escopo; o lock por sessão (ADR-0011) as serializa mesmo assim
 
+## Validação (spike W0.4, ADK 2.9.1, LLM falso, cada passo em processo novo)
+
+| Cenário | `is_resumable=True` | `is_resumable=False` |
+|---|---|---|
+| Pedido gera pendência autorada pelo especialista | Pausa; nenhum texto na execução | Modelo segue e responde sobre o "pendente" |
+| Negar após reinício | 0 execuções | 0 execuções |
+| Aprovar após reinício | 1 execução | 1 execução |
+| Reenviar o mesmo id **sem** a checagem da API | **Executa de novo** | **Executa de novo** |
+
+Conclusões:
+- A retomada não exige `invocation_id` explícito: basta enviar a `FunctionResponse` como `new_message`.
+- `is_resumable=True` mantido: a execução para na pendência (`resposta` vazia, como o contrato prevê) e o modelo não narra uma ação que não aconteceu.
+- **O ADK não impede reexecução ao receber a mesma resposta duas vezes.** O 409 calculado a partir dos eventos, sob o lock por sessão (ADR-0011), é a barreira que garante execução única, e não um detalhe de contrato.
+
 ### Ações decorrentes
-- [ ] Spike W0.4: aprovar, negar, reenviar e aprovar após reinício, com `SqliteSessionService`
-- [ ] Registrar no spike se a retomada exige `invocation_id` explícito no `run_async`
-- [ ] Plano B: se a retomada falhar, novo ADR adotando a Opção D do ADR-0002
+- [x] Spike W0.4: aprovar, negar, reenviar e aprovar após reinício, com `SqliteSessionService`
+- [x] Retomada sem `invocation_id` explícito
+- [x] Plano B descartado
+- [ ] Teste de rota: reenvio do mesmo id recebe 409 e não chama o Runner

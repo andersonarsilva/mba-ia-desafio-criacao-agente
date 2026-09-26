@@ -54,5 +54,5 @@ Reiniciar a API não pode apagar conversas nem dados (Garantia 3). Os arquivos d
 - Contenção no `sessions.db` sob escrita simultânea de duas sessões (passo 14)
 
 ### Ações decorrentes
-- [ ] Spike W0.6: duas sessões gravando em paralelo no `SqliteSessionService`; se houver lock, configurar WAL/busy_timeout nele também
+- [x] Spike W0.6: 5 rodadas de duas aprovações simultâneas (`asyncio.gather`) em sessões distintas no mesmo `SqliteSessionService`, sem exceção e sempre com exatamente 1 reserva ativa; nenhum ajuste no serviço de sessão foi necessário. A disputa real via HTTP é revalidada no E2E (W4)
 - [ ] Revisitar (PostgreSQL) se a API precisar de mais de um processo

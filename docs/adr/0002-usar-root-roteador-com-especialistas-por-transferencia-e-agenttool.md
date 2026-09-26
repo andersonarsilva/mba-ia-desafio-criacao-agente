@@ -70,6 +70,6 @@ Os especialistas por transferência podem voltar ao root (transferência ao pai 
 - O comportamento depende do roteador do ADK 2.9.1 (ADR-0001)
 
 ### Ações decorrentes
-- [ ] Spike W0.4: pausa e retomada no especialista com `SqliteSessionService` e reinício de processo
-- [ ] Spike W0.5: confirmar que eventos do `AgentTool` não aparecem na sessão pai
-- [ ] Se W0.4 falhar, registrar novo ADR adotando a Opção D
+- [x] Spike W0.4: pausa e retomada no especialista com `SqliteSessionService` e reinício de processo, confirmação autorada por `reservas` e retomada nele
+- [x] Spike W0.5: a sessão pai registrou só a chamada `regulamento` e sua resposta final; o texto devolvido por `ler_capitulo` não apareceu em nenhum evento
+- [x] Opção D descartada: W0.4 passou
