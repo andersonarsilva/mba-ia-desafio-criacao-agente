@@ -137,5 +137,6 @@ Os testes unitários e de integração usam um LLM falso roteirizado com o Runne
 
 Para testar manualmente:
 
+- `./scripts/testar_api.sh [--restaurar]`: shell interativo. Instala as dependências, restaura os dados se você pedir e sobe a API. Depois abre um menu para criar sessões, enviar mensagens digitadas por você, aprovar ou negar confirmações pendentes, ver eventos e rotas de verificação, disparar a disputa simultânea e reiniciar a API. Requer `curl` e `jq`.
 - [`docs/exemplos-curl.md`](docs/exemplos-curl.md): roteiro com curl que segue o fluxo do avaliador, incluindo a disputa com dois curl simultâneos.
 - [`docs/postman/aurora.postman_collection.json`](docs/postman/aurora.postman_collection.json): collection Postman com o mesmo roteiro. Ela guarda os ids de sessão e de confirmação em variáveis e já confere os status esperados.

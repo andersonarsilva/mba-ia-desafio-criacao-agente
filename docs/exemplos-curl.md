@@ -1,6 +1,6 @@
 # Testando a API com curl
 
-Roteiro manual que segue o fluxo do avaliador. Contrato completo em [contrato-api.md](contrato-api.md). Para o Postman, importe a collection [`postman/aurora.postman_collection.json`](postman/aurora.postman_collection.json).
+Roteiro manual que segue o fluxo do avaliador. Contrato completo em [contrato-api.md](contrato-api.md). Para testar de forma interativa, sem montar os comandos, use `./scripts/testar_api.sh`. Para o Postman, importe a collection [`postman/aurora.postman_collection.json`](postman/aurora.postman_collection.json).
 
 ## Preparação
 
