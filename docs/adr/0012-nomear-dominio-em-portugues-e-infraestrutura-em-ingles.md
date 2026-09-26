@@ -46,4 +46,4 @@ A convenção padrão do autor é código em inglês, exceto quando o padrão do
 - Arquivos com identificadores dos dois idiomas
 
 ### Ações decorrentes
-- [ ] Aplicar na estrutura `src/aurora/` do planejamento
+- [x] Aplicar na estrutura `src/aurora/` do planejamento

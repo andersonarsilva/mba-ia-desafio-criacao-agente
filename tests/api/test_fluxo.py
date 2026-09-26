@@ -196,3 +196,21 @@ async def test_concurrent_approvals_have_single_winner_and_both_succeed(montar_a
             reservas = (await cliente.get(f"/apartamentos/{apartamento}/reservas")).json()
             total += sum(r["area"] == "salao-de-festas" and r["data"] == "2030-05-11" for r in reservas)
         assert total == 1
+
+
+async def test_simultaneous_answers_to_same_confirmation_execute_once(montar_api):
+    transporte = httpx.ASGITransport(app=montar_api())
+    async with httpx.AsyncClient(transport=transporte, base_url="http://aurora") as cliente:
+        sessao = (await cliente.post("/sessoes", json={"apartamento": "101"})).json()["session_id"]
+        corpo = (
+            await cliente.post(f"/sessoes/{sessao}/mensagens", json={"texto": "Reserve o salão de festas para 2030-04-20."})
+        ).json()
+        confirmacao = {"id": corpo["confirmacoes_pendentes"][0]["id"], "confirmado": True}
+
+        respostas = await asyncio.gather(
+            *(cliente.post(f"/sessoes/{sessao}/confirmacoes", json=confirmacao) for _ in range(2))
+        )
+
+        assert sorted(r.status_code for r in respostas) == [200, 409]
+        reservas = (await cliente.get("/apartamentos/101/reservas")).json()
+        assert sum(r["area"] == "salao-de-festas" for r in reservas) == 1

@@ -56,5 +56,5 @@ Também: o código de uma reserva nova é gerado pelo sistema e nunca repete o d
 - Formato do código difere do `RSV-NNNN` inicial; o enunciado deixa o formato livre
 
 ### Ações decorrentes
-- [ ] Teste de concorrência: N gravações simultâneas da mesma área/data resultam em exatamente 1 ativa
-- [ ] Teste: código novo nunca coincide com código de reserva cancelada
+- [x] Teste de concorrência: N gravações simultâneas da mesma área/data resultam em exatamente 1 ativa
+- [x] Teste: código novo nunca coincide com código de reserva cancelada

@@ -47,4 +47,4 @@ Duas requisições na **mesma** sessão ao mesmo tempo (mensagem + confirmação
 - Escalar para vários workers exigiria lock distribuído; fora de escopo (ADR-0004)
 
 ### Ações decorrentes
-- [ ] Teste: duas confirmações simultâneas do mesmo id resultam em uma execução e um 409
+- [x] Teste: duas confirmações simultâneas do mesmo id resultam em uma execução e um 409

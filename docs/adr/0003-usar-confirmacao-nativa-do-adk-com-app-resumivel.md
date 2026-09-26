@@ -79,4 +79,4 @@ Conclusões:
 - [x] Spike W0.4: aprovar, negar, reenviar e aprovar após reinício, com `SqliteSessionService`
 - [x] Retomada sem `invocation_id` explícito
 - [x] Plano B descartado
-- [ ] Teste de rota: reenvio do mesmo id recebe 409 e não chama o Runner
+- [x] Teste de rota: reenvio do mesmo id recebe 409 e não chama o Runner

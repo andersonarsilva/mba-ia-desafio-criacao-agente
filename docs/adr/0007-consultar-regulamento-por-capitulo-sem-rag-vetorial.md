@@ -66,7 +66,7 @@ O tema é isolamento de contexto e custo de tokens, não qualidade de busca sem�
 - A resposta final do especialista entra nos eventos; ela é o único vetor residual, coberto por prompt e por teste E2E
 
 ### Ações decorrentes
-- [ ] Teste: `ler_capitulo("IV")` não contém texto de nenhum outro capítulo
-- [ ] Teste: prompt do root não contém texto do regulamento
-- [ ] E2E W4.3: varrer `GET /eventos` por trechos de outros capítulos
+- [x] Teste: `ler_capitulo("IV")` não contém texto de nenhum outro capítulo
+- [x] Teste: prompt do root não contém texto do regulamento
+- [x] E2E W4.3: varrer `GET /eventos` por trechos de outros capítulos
 - [ ] Revisitar (busca vetorial) só se o regulamento perder a estrutura por capítulos ou crescer além de um capítulo por chamada

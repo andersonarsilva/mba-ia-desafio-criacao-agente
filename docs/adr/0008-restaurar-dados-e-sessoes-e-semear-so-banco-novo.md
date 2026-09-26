@@ -51,4 +51,4 @@ O enunciado exige um comando que volte reservas e visitantes ao estado de `dados
 - Restaurar com a API rodando deixa conexões apontando para arquivos apagados; o README orienta parar a API antes
 
 ### Ações decorrentes
-- [ ] Documentar a ordem no README: restaurar → subir
+- [x] Documentar a ordem no README: restaurar → subir

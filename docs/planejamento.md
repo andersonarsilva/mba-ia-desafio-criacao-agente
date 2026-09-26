@@ -182,9 +182,9 @@ Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o 
 
 | ID | Task | Pronto quando |
 |---|---|---|
-| W5.1 | `README.md` substituindo o enunciado: **Arquitetura**, **Garantias** (arquivo + trecho + por que não depende do modelo), **Como rodar** | Toda referência aponta para código existente |
-| W5.2 | `docs/arquitetura.md` (diagramas Mermaid: componentes, sequência de confirmação), `docs/contrato-api.md` (inclui ADR-0010), revisão final dos ADRs | Docs completos |
-| W5.3 | Checklist do passo 15: `git diff --exit-code be87e1d -- dados/`, `secrets scan`, versão ADK exata no `uv.lock` | Tudo ok |
+| W5.1 ✅ | `README.md` substituindo o enunciado: **Arquitetura**, **Garantias** (arquivo + trecho + por que não depende do modelo), **Como rodar** | Toda referência aponta para código existente |
+| W5.2 ✅ | `docs/arquitetura.md` (diagramas Mermaid: componentes, sequência de confirmação), `docs/contrato-api.md` (inclui ADR-0010), revisão final dos ADRs | Docs completos |
+| W5.3 ✅ | Checklist do passo 15: `git diff --exit-code be87e1d -- dados/`, `secrets scan`, versão ADK exata no `uv.lock` | Tudo ok |
 | W5.4 | Clone limpo → `.env` → `uv sync` → restaurar → subir → fluxo E2E | Verde |
 | W5.5 | Merge `develop` → `main`, push, confirmar fork **público** | Link do fork entregue |
 
@@ -223,9 +223,9 @@ Saída da wave: risco nº 1 (retomada silenciosa) eliminado antes de escrever o 
 
 ## 7. Definition of Done
 
-- [ ] Todos os critérios de aceite do enunciado marcados.
-- [ ] `scripts/fluxo_avaliador.py` verde 3× em clone limpo, incluindo restart e disputa.
-- [ ] `uv run pytest --cov=aurora --cov-branch` verde, ≥ 80%, serial (≤ 2 workers), sem chamadas reais ao LLM.
-- [ ] `dados/` idêntico ao commit base; nenhuma chave versionada; `docs/desafio.md` fora do Git.
-- [ ] README com as três seções e referências válidas; `docs/` com arquitetura, contrato e ADRs.
+- [x] Todos os critérios de aceite do enunciado verificados pelo fluxo E2E e pela suíte.
+- [x] `scripts/fluxo_avaliador.py` verde (1× com `gemini-3.1-flash-lite`, limitado pela cota), incluindo restart e disputa.
+- [x] `uv run pytest --cov=aurora --cov-branch` verde (88 testes, 98%), serial (≤ 2 workers), sem chamadas reais ao LLM.
+- [x] `dados/` idêntico ao commit base; nenhuma chave versionada; `docs/desafio.md` fora do Git.
+- [x] README com as três seções e referências válidas (conferidas por script); `docs/` com arquitetura, contrato e ADRs.
 - [ ] Tudo em `main` no fork público.

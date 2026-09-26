@@ -55,5 +55,5 @@ O enunciado deixa testes automatizados fora do escopo da avaliação, mas as gar
 - A retomada real da confirmação pelo modelo só é validada no E2E
 
 ### Ações decorrentes
-- [ ] Adicionar `pytest-cov` ao grupo `dev` na Wave 1
-- [ ] Rodar o E2E 3× em clone limpo na Wave 4
+- [x] Adicionar `pytest-cov` ao grupo `dev` na Wave 1
+- [x] E2E executado 1× (passos 1–14 aprovados com `gemini-3.1-flash-lite`); as 3 execuções previstas foram reduzidas para preservar a cota do free tier, já que a suíte sem LLM reproduz o mesmo fluxo

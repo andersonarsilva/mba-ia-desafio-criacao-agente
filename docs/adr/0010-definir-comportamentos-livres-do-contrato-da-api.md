@@ -46,4 +46,4 @@ O contrato fixa rotas, campos e status principais, mas deixa livres alguns compo
 - API em `127.0.0.1` não é acessível de fora da máquina; aceitável para o desafio
 
 ### Ações decorrentes
-- [ ] Refletir a tabela em `docs/contrato-api.md`
+- [x] Refletir a tabela em `docs/contrato-api.md`

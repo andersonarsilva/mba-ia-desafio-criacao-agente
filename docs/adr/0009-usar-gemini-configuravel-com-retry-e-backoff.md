@@ -50,4 +50,4 @@ Os modelos são Gemini com chave do Google AI Studio. Os modelos disponíveis e 
 
 ### Ações decorrentes
 - [x] W0.7: `gemini-2.5-flash` aparece na listagem de modelos, mas a chamada real (W4) respondeu 404 "no longer available to new users", recomendando `gemini-3.8-flash`. O `gemini-3.8-flash` funcionou (passos 1–9 do E2E), mas o free tier dele é de 5 RPM e 20 requisições/dia, insuficiente para as ~40–50 chamadas do fluxo. Padrão definido como `gemini-3.1-flash-lite`, que tem cota gratuita maior. Lições: disponibilidade só se confirma com uma chamada de geração, não pela listagem; e a cota diária do free tier é o fator decisivo na escolha do modelo padrão
-- [ ] Documentar as variáveis no README
+- [x] Documentar as variáveis no README

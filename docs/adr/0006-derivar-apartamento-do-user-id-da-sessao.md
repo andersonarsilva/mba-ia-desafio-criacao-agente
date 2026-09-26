@@ -57,5 +57,5 @@ O passo 15 confere que nenhuma tool aceita um apartamento escolhido pelo modelo 
 - Um morador não consegue agir em nome de outro apartamento nem com justificativa legítima; aceito por requisito
 
 ### Ações decorrentes
-- [ ] Teste: nenhuma tool registrada declara parâmetro `apartamento`
-- [ ] Teste: tools com contexto do 101 nunca retornam RSV-4821 nem Marina Duarte
+- [x] Teste: nenhuma tool registrada declara parâmetro `apartamento`
+- [x] Teste: tools com contexto do 101 nunca retornam RSV-4821 nem Marina Duarte

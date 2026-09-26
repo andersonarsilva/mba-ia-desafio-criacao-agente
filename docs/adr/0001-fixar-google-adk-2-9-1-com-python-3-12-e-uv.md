@@ -54,5 +54,5 @@ Os autores do desafio relatam que o comportamento da retomada de confirmação m
 
 ### Ações decorrentes
 - [x] Fixar `google-adk==2.9.1` no `pyproject.toml` e gerar `uv.lock`
-- [ ] Validar a retomada na 2.9.1 no spike W0.4
-- [ ] Revisitar só se o spike falhar numa combinação que a 2.10.x corrija
+- [x] Validar a retomada na 2.9.1 no spike W0.4
+- [x] Spike passou; não há motivo para revisitar a versão
